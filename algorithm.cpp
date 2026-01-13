@@ -7,6 +7,7 @@ int main() {
 	cout << "Hello World!" << endl;
 	ToH game = ToH(9);
 	Solver solver = Solver(game);
+	solver.solve();
 	game.printState();
 	return 0;
 }

@@ -5,7 +5,7 @@ using namespace std;
 
 int main() {
 	cout << "Hello World!" << endl;
-	ToH game = ToH(9);
+	ToH game = ToH(3);
 	Solver solver = Solver(game);
 	solver.solve();
 	game.printState();

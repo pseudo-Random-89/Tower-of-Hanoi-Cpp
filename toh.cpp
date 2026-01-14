@@ -27,7 +27,12 @@ void ToH::move(int fromidx, int toidx) {
         rods.at(toidx).at(0) = rods.at(fromidx).at(0);
     }
 
-    rods.at(toidx).at(0) = rods.at(fromidx).at(0);
+    vector<int> a = rods.at(toidx);
+    int b = a.at(0);
+    vector<int> c = rods.at(fromidx);
+    int d = c.at(0);
+    rods.at(toidx).at(0) = rods.at(fromidx).at(0); // TODO: HERE IS THE PROBLEM
+
 
     for (int i=0; i < rods.at(fromidx).size() - 1; i++) {
         rods.at(fromidx).at(i) = rods.at(fromidx).at(i + 1);

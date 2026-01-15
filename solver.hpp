@@ -9,7 +9,7 @@ class Solver {
 		ToH game;
 		void moveStack(int ring, int fromidx, int toidx);
 	public:
-		explicit Solver(const ToH &newGame);
+		explicit Solver(ToH newGame);
 		void solve();
 
 };

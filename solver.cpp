@@ -1,17 +1,18 @@
 #include <iostream>
+#include <utility>
 #include "solver.hpp"
 #include "toh.hpp"
 
 using namespace std;
 
-Solver::Solver(const ToH &newGame) : game(newGame) {}
+Solver::Solver(ToH newGame) : game(std::move(newGame)) {}
 
 void Solver::solve() {
     // Never move an odd numbered ring onto another odd numbered ring & vice versa
 
     // moveStack(game.countDiscs(), 0, 2);
 
-    game.move(0,game.countDiscs() % 2 + 1);
+    game.move(0,1);
 
     int counter = 1;
     int lastMoved = 1;
@@ -31,26 +32,26 @@ void Solver::solve() {
 
         if (rings.at(0) > rings.at(1)) {
             int hold = rings.at(0);
-            rings.at(1) = rings.at(0);
-            rings.at(0) = hold;
+            rings.at(0) = rings.at(1);
+            rings.at(1) = hold;
             rodidx.at(1) = 0;
             rodidx.at(0) = 1;
         }
         if (rings.at(1) > rings.at(2)) {
             int hold = rings.at(1);
             int holdRod = rodidx.at(1);
-            rings.at(2) = rings.at(1);
-            rings.at(1) = hold;
-            rodidx.at(2) = rodidx.at(1);
-            rodidx.at(1) = holdRod;
+            rings.at(1) = rings.at(2);
+            rings.at(2) = hold;
+            rodidx.at(1) = rodidx.at(2);
+            rodidx.at(2) = holdRod;
         }
         if (rings.at(0) > rings.at(1)) {
             int hold = rings.at(0);
             int holdRod = rodidx.at(0);
-            rings.at(1) = rings.at(0);
-            rings.at(0) = hold;
-            rodidx.at(1) = rodidx.at(0);
-            rodidx.at(0) = holdRod;
+            rings.at(0) = rings.at(1);
+            rings.at(1) = hold;
+            rodidx.at(0) = rodidx.at(1);
+            rodidx.at(1) = holdRod;
         }
 
         int ringToMove = rings.at(0);
@@ -68,15 +69,17 @@ void Solver::solve() {
 
         if (!rods.at(destinationRod).empty()) destinationRing = rods.at(destinationRod).at(0);
 
-        while (destinationRod == rodToMove || (destinationRing != 0 && destinationRing < ringToMove)) {
+        while (destinationRod == rodToMove || (destinationRing != 0 && destinationRing < ringToMove)) { //  || ringToMove % 2 == destinationRing % 2
             destinationRod++;
-            destinationRing = rods.at(destinationRod).at(0);
+            destinationRing = 0;
+            if (!rods.at(destinationRod).empty()) destinationRing = rods.at(destinationRod).at(0);
         }
 
         game.move(rodToMove, destinationRod);
 
         game.printState();
         counter++;
+        lastMoved = ringToMove;
     }
     cout << "Finished in " << counter << " steps." << endl;
 }

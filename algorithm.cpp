@@ -9,5 +9,7 @@ int main() {
 	Solver solver = Solver(game);
 	solver.solve();
 	game.printState();
+	// vector<int> a = {1, 2, 3, 4, 5};
+	// cout << (a.at(0) > a.at(1)) << endl;
 	return 0;
 }

@@ -69,10 +69,23 @@ void Solver::solve() {
 
         if (!rods.at(destinationRod).empty()) destinationRing = rods.at(destinationRod).at(0);
 
-        while (destinationRod == rodToMove || (destinationRing != 0 && destinationRing < ringToMove)) { //  || ringToMove % 2 == destinationRing % 2
+        while (destinationRod == rodToMove || (destinationRing != 0 && (destinationRing < ringToMove || ringToMove % 2 == destinationRing % 2))) {
             destinationRod++;
             destinationRing = 0;
             if (!rods.at(destinationRod).empty()) destinationRing = rods.at(destinationRod).at(0);
+        }
+
+        // TODO: INSTEAD OF DOING A LOOP, TEST THE VIABILITY OF ALL 3 RINGS, AND RANK THEM
+        int score1 = 0;
+        int score2 = 0;
+        int score3 = 0;
+
+        if (rodToMove == 0) {
+
+        } else if (rodToMove == 1) {
+
+        } else {
+
         }
 
         game.move(rodToMove, destinationRod);

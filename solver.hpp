@@ -7,7 +7,6 @@ using namespace std;
 class Solver {
 	private:
 		ToH game;
-		void moveStack(int ring, int fromidx, int toidx);
 	public:
 		explicit Solver(ToH newGame);
 		void solve();

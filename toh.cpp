@@ -27,10 +27,6 @@ void ToH::move(int fromidx, int toidx) {
         rods.at(toidx).at(0) = rods.at(fromidx).at(0);
     }
 
-    vector<int> a = rods.at(toidx);
-    int b = a.at(0);
-    vector<int> c = rods.at(fromidx);
-    int d = c.at(0);
     rods.at(toidx).at(0) = rods.at(fromidx).at(0);
 
 
@@ -62,5 +58,5 @@ int ToH::countDiscs() const {
 }
 
 bool ToH::isSolved() const {
-    return rods.at(0).size() == 0 && rods.at(1).size() == 0 && rods.at(2).size() == numDiscs;
+    return rods.at(0).empty() && rods.at(1).empty() && rods.at(2).size() == numDiscs;
 }

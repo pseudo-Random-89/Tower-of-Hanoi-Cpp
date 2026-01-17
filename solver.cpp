@@ -1,5 +1,6 @@
 #include <iostream>
 #include <utility>
+#include <cmath>
 #include "solver.hpp"
 #include "toh.hpp"
 
@@ -8,11 +9,8 @@ using namespace std;
 Solver::Solver(ToH newGame) : game(std::move(newGame)) {}
 
 void Solver::solve() {
-    // Never move an odd numbered ring onto another odd numbered ring & vice versa
-
-    // moveStack(game.countDiscs(), 0, 2);
-
-    game.move(0,1);
+    game.move(0,game.countDiscs() % 2 + 1);
+    game.printState();
 
     int counter = 1;
     int lastMoved = 1;
@@ -64,41 +62,78 @@ void Solver::solve() {
 
         int rodToMove = rodidx.at(idx);
 
-        int destinationRod = 0;
-        int destinationRing = 0;
-
-        if (!rods.at(destinationRod).empty()) destinationRing = rods.at(destinationRod).at(0);
-
-        while (destinationRod == rodToMove || (destinationRing != 0 && (destinationRing < ringToMove || ringToMove % 2 == destinationRing % 2))) {
-            destinationRod++;
-            destinationRing = 0;
-            if (!rods.at(destinationRod).empty()) destinationRing = rods.at(destinationRod).at(0);
-        }
-
-        // TODO: INSTEAD OF DOING A LOOP, TEST THE VIABILITY OF ALL 3 RINGS, AND RANK THEM
-        int score1 = 0;
-        int score2 = 0;
-        int score3 = 0;
+        int scores[3] = { 0, 0, 0 };
 
         if (rodToMove == 0) {
+            scores[0] = -1000;
+            scores[1]++;
+            scores[2]++;
 
+            scores[1] += (ring2 != 0) * -((ringToMove % 2 == ring2 % 2) * 10 - 5);
+            scores[2] += (ring3 != 0) * -((ringToMove % 2 == ring3 % 2) * 10 - 5);
+
+            scores[1] -= 10 * (ringToMove > ring2 && ring2 != 0);
+            scores[2] -= 10 * (ringToMove > ring3 && ring3 != 0);
         } else if (rodToMove == 1) {
+            scores[1] = -1000;
+            scores[0]++;
+            scores[2]++;
 
+            scores[0] += (ring1 != 0) * -((ringToMove % 2 == ring1 % 2) * 10 - 5);
+            scores[2] += (ring3 != 0) * -((ringToMove % 2 == ring3 % 2) * 10 - 5);
+
+            scores[0] -= 10 * (ringToMove > ring1 && ring1 != 0);
+            scores[2] -= 10 * (ringToMove > ring3 && ring3 != 0);
         } else {
+            scores[2] = -1000;
+            scores[0]++;
+            scores[1]++;
 
+            scores[0] += (ring1 != 0) * -((ringToMove % 2 == ring1 % 2) * 10 - 5);
+            scores[1] += (ring2 != 0) * -((ringToMove % 2 == ring2 % 2) * 10 - 5);
+
+            scores[0] -= 10 * (ringToMove > ring1 && ring1 != 0);
+            scores[1] -= 10 * (ringToMove > ring2 && ring2 != 0);
         }
 
-        game.move(rodToMove, destinationRod);
+        int destinationRodProp[3] = {0, 1, 2};
+
+        if (scores[0] > scores[1]) {
+            int holdScore = scores[0];
+            destinationRodProp[0] = 1;
+            destinationRodProp[1] = 0;
+            scores[0] = scores[1];
+            scores[1] = holdScore;
+        }
+        if (scores[1] > scores[2]) {
+            int holdRod = destinationRodProp[1];
+            int holdScore = scores[1];
+            destinationRodProp[1] = destinationRodProp[2];
+            destinationRodProp[2] = holdRod;
+            scores[1] = scores[2];
+            scores[2] = holdScore;
+        }
+        if (scores[0] > scores[1]) {
+            int holdRod = destinationRodProp[0];
+            int holdScore = scores[0];
+            destinationRodProp[0] = destinationRodProp[1];
+            destinationRodProp[1] = holdRod;
+            scores[0] = scores[1];
+            scores[1] = holdScore;
+        }
+
+        game.move(rodToMove, destinationRodProp[2]);
 
         game.printState();
         counter++;
         lastMoved = ringToMove;
     }
-    cout << "Finished in " << counter << " steps." << endl;
-}
 
-void Solver::moveStack(int largestRing, int fromidx, int toidx) {
-    if (largestRing != 0) {
-        moveStack(largestRing-1, fromidx, toidx);
+    cout << "Finished in " << counter << " steps." << endl;
+
+    if (pow(2, game.countDiscs()) - 1 == counter) {
+        cout << "This is optimal." << endl;
+    } else {
+        cout << "This is not optimal." << endl;
     }
 }

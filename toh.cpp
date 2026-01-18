@@ -48,6 +48,11 @@ void ToH::printState() const {
         for (const int j : rod) {
             toReturn += to_string(j) + " ";
         }
+
+        // for (int i=rod.size(); i > 0; i--) {
+        //     toReturn += to_string(i) + " ";
+        // }
+
         toReturn += "\n";
     }
     cout << toReturn << endl;

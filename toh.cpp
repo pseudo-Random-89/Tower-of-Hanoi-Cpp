@@ -42,20 +42,38 @@ vector<vector<int>> ToH::getState() {
 }
 
 void ToH::printState() const {
-    string toReturn;
+    string toPrint;
 
-    for (const vector<int>& rod : rods) {
-        for (const int j : rod) {
-            toReturn += to_string(j) + " ";
+    for (int i = numDiscs - 1; i >= 0 ; i--) {
+        for (const vector<int>& rod: rods) {
+            // if (numDiscs - 1 - i < rod.size()) {
+            //     toPrint += to_string(rod.at(numDiscs - 1 - i)) + "  ";
+            // } else {
+            //     toPrint += "-  ";
+            // }
+
+            // numDiscs - rod.size()
+            // 8 - 6 = 2
+            if (numDiscs - rod.size() < i) {
+                toPrint += to_string(rod.at(numDiscs - 1 - i)) + "  ";
+            } else {
+                toPrint += "-  ";
+            }
+
+            // TODO: add each line as an element in a list and read the list backwards to print
         }
 
-        // for (int i=rod.size(); i > 0; i--) {
-        //     toReturn += to_string(i) + " ";
-        // }
-
-        toReturn += "\n";
+        toPrint += "\n";
     }
-    cout << toReturn << endl;
+
+    // for (const vector<int>& rod : rods) {
+    //     if (!rod.empty()) for (int i = rod.size() - 1; i >= 0; i--) {
+    //         toPrint += to_string(rod.at(i)) + " ";
+    //     }
+    //
+    //     toPrint += "\n";
+    // }
+    cout << toPrint << endl;
 }
 
 int ToH::countDiscs() const {

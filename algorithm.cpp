@@ -30,6 +30,7 @@ int main() {
 			cout << "Not a valid input, try again." << endl;
 			continue;
 		}
+		cout << endl;
 		ToH game = ToH(rings);
 		game.printState();
 		Solver solver = Solver(game);

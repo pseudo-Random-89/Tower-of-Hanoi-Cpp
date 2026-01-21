@@ -1,7 +1,8 @@
+#include "toh.hpp"
+#include <algorithm>
 #include <iostream>
 #include <string>
 #include <vector>
-#include "toh.hpp"
 
 using namespace std;
 
@@ -29,7 +30,6 @@ void ToH::move(int fromidx, int toidx) {
 
     rods.at(toidx).at(0) = rods.at(fromidx).at(0);
 
-
     for (int i=0; i < rods.at(fromidx).size() - 1; i++) {
         rods.at(fromidx).at(i) = rods.at(fromidx).at(i + 1);
     }
@@ -44,36 +44,40 @@ vector<vector<int>> ToH::getState() {
 void ToH::printState() const {
     string toPrint;
 
-    for (int i = numDiscs - 1; i >= 0 ; i--) {
-        for (const vector<int>& rod: rods) {
-            // if (numDiscs - 1 - i < rod.size()) {
-            //     toPrint += to_string(rod.at(numDiscs - 1 - i)) + "  ";
-            // } else {
-            //     toPrint += "-  ";
-            // }
+    vector<int> rod1 = rods.at(0);
+    vector<int> rod2 = rods.at(1);
+    vector<int> rod3 = rods.at(2);
 
-            // numDiscs - rod.size()
-            // 8 - 6 = 2
-            if (numDiscs - rod.size() < i) {
-                toPrint += to_string(rod.at(numDiscs - 1 - i)) + "  ";
-            } else {
-                toPrint += "-  ";
-            }
+    reverse(rod1.begin(), rod1.end());
+    reverse(rod2.begin(), rod2.end());
+    reverse(rod3.begin(), rod3.end());
 
-            // TODO: add each line as an element in a list and read the list backwards to print
-        }
+    for (int i=0; i < numDiscs ; i++) {
+        if (numDiscs - 1 - i < rod1.size()) toPrint += buildRing(rod1.at(numDiscs - 1 - i));
+        else toPrint += buildRing(0);
+
+        if (numDiscs - 1 - i < rod2.size()) toPrint += buildRing(rod2.at(numDiscs - 1 - i));
+        else toPrint += buildRing(0);
+
+        if (numDiscs - 1 - i < rod3.size()) toPrint += buildRing(rod3.at(numDiscs - 1 - i));
+        else toPrint += buildRing(0);
 
         toPrint += "\n";
     }
 
-    // for (const vector<int>& rod : rods) {
-    //     if (!rod.empty()) for (int i = rod.size() - 1; i >= 0; i--) {
-    //         toPrint += to_string(rod.at(i)) + " ";
-    //     }
-    //
-    //     toPrint += "\n";
-    // }
     cout << toPrint << endl;
+}
+
+string ToH::buildRing(int ring) const {
+    string toReturn;
+
+    while (ring--) toReturn += "||";
+    if (toReturn.empty()) toReturn = "-";
+    else toReturn += "|";
+    while (toReturn.size() < numDiscs * 2) toReturn = " " + toReturn + " ";
+    toReturn += " ";
+
+    return toReturn;
 }
 
 int ToH::countDiscs() const {

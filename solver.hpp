@@ -9,6 +9,6 @@ class Solver {
 		ToH game;
 	public:
 		explicit Solver(ToH newGame);
-		void solve();
+		void solve(bool slow);
 
 };

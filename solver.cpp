@@ -1,21 +1,27 @@
-#include <iostream>
-#include <utility>
-#include <cmath>
 #include "solver.hpp"
+#include <chrono>
+#include <cmath>
+#include <iostream>
+#include <thread>
+#include <utility>
 #include "toh.hpp"
 
 using namespace std;
 
 Solver::Solver(ToH newGame) : game(std::move(newGame)) {}
 
-void Solver::solve() {
+void Solver::solve(bool slow) {
+    int counter = 1;
+    int lastMoved = 1;
+    int delay = slow*500000000;
+
+    game.printState();
+    this_thread::sleep_for(chrono::nanoseconds(delay));
     game.move(0,game.countDiscs() % 2 + 1);
     game.printState();
 
-    int counter = 1;
-    int lastMoved = 1;
-
     while (!game.isSolved()) {
+        this_thread::sleep_for(chrono::nanoseconds(delay));
         vector<vector<int>> rods = game.getState();
         int ring1 = 0;
         int ring2 = 0;

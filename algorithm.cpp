@@ -1,7 +1,4 @@
-#include <charconv>
 #include <iostream>
-#include <bits/parse_numbers.h>
-
 #include "solver.hpp"
 
 using namespace std;
@@ -18,7 +15,7 @@ int main() {
 		}
 		if (tolower(input.at(0)) == 'x') break;
 
-		int rings = 3;
+		int rings;
 		try {
 			rings = stoi(input);
 
@@ -30,11 +27,24 @@ int main() {
 			cout << "Not a valid input, try again." << endl;
 			continue;
 		}
+
+		while (true) {
+			cout << "Go fast? (y/n)" << endl;
+			cin >> input;
+
+			if (tolower(input.at(0)) != 'y' && tolower(input.at(0)) != 'n') {
+				cout << "Not a valid input, try again." << endl;
+				continue;
+			}
+
+			break;
+		}
+
+
 		cout << endl;
 		ToH game = ToH(rings);
-		game.printState();
 		Solver solver = Solver(game);
-		solver.solve();
+		solver.solve(tolower(input.at(0)) == 'n');
 	}
 	return 0;
 }
